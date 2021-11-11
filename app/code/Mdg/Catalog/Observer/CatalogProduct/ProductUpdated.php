@@ -6,6 +6,7 @@ namespace Mdg\Catalog\Observer\CatalogProduct;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Event observer for the event "catalog_product_edit_action".
@@ -23,44 +24,30 @@ class ProductUpdated implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        /** @var ProductInterface $product */
         $product = $observer->getProduct();
 
-        if (!$product->getId()) {
-            return;
+        if ($product->getId()) {
+            $this->updateProductNamePrefix($product);
         }
+    }
 
+    /**
+     * Updates product's name prefix
+     *
+     * @param ProductInterface $product
+     */
+    private function updateProductNamePrefix(ProductInterface $product): void
+    {
         $name = $product->getName();
 
-        if (str_contains($name, ProductCreated::PREFIX)) {
-            $nameWithPrefix = $this->replacePrefix($name);
+        if (strstr($name, ProductCreated::PREFIX)) {
+            $nameWithPrefix = str_replace(ProductCreated::PREFIX, self::PREFIX, $name);
         } else {
-            $nameWithPrefix = $this->addPrefix($name);
+            $nameWithPrefix = self::PREFIX . $name;
         }
 
         $product->setName($nameWithPrefix);
-    }
-
-    /**
-     * Replaces the prefix from the ProductCreated observer by the new one.
-     *
-     * @param string $name
-     * @return string
-     */
-    private function replacePrefix(string $name): string
-    {
-        return str_replace(ProductCreated::PREFIX, self::PREFIX, $name);
-    }
-
-    /**
-     * Adds the prefix.
-     *
-     * @param string $name
-     * @return string
-     */
-    private function addPrefix(string $name): string
-    {
-        return self::PREFIX . $name;
     }
 }
 

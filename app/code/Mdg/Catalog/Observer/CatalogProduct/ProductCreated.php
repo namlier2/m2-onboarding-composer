@@ -26,13 +26,11 @@ class ProductCreated implements ObserverInterface
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $observer->getProduct();
 
-        if ($product->getId()) {
-            return;
+        if (!$product->getId()) {
+            $name = $product->getName();
+            $nameWithPrefix = self::PREFIX . $name;
+            $product->setName($nameWithPrefix);;
         }
-
-        $name = $product->getName();
-        $nameWithPrefix = self::PREFIX . $name;
-        $product->setName($nameWithPrefix);
     }
 }
 
