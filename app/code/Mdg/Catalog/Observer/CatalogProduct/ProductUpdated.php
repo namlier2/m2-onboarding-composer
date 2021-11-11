@@ -25,9 +25,14 @@ class ProductUpdated implements ObserverInterface
     {
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $observer->getProduct();
+
+        if (!$product->getId()) {
+            return;
+        }
+
         $name = $product->getName();
 
-        if (str_contains(ProductCreated::PREFIX, $name)) {
+        if (str_contains($name, ProductCreated::PREFIX)) {
             $nameWithPrefix = $this->replacePrefix($name);
         } else {
             $nameWithPrefix = $this->addPrefix($name);
