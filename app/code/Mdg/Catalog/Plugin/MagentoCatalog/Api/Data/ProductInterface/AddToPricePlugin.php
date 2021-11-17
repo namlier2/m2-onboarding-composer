@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mdg\Catalog\Plugin\Catalog\Api\Data\ProductInterface;
+namespace Mdg\Catalog\Plugin\MagentoCatalog\Api\Data\ProductInterface;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Mdg\Catalog\Model\Config\AddToPrice as AddToPriceConfig;

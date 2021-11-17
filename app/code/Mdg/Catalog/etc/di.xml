@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Mdg\Catalog\Logging\Info" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/mdg/catalog.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Mdg\Catalog\Logging\Logger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">Mdg\Catalog\Logging\Info</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Mdg\Catalog\Plugin\MagentoCatalog\Model\Product\LogProductsSavePlugin">
+        <arguments>
+            <argument name="logger" xsi:type="object">Mdg\Catalog\Logging\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Api\Data\ProductInterface">
+        <plugin name="mdg_customize_name_setting"
+                type="Mdg\Catalog\Plugin\MagentoCatalog\Api\Data\ProductInterface\CustomizeNameSettingPlugin"/>
+        <plugin name="mdg_double_price"
+                type="Mdg\Catalog\Plugin\MagentoCatalog\Api\Data\ProductInterface\DoublePricePlugin"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="mdg_log_products_save"
+                type="Mdg\Catalog\Plugin\MagentoCatalog\Model\Product\LogProductsSavePlugin"/>
+    </type>
+</config>
