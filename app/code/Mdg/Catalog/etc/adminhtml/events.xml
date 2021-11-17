@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="catalog_product_save_before">
+        <observer name="mdg_product_created" instance="Mdg\Catalog\Observer\CatalogProduct\ProductCreated" />
+        <observer name="mdg_product_updated" instance="Mdg\Catalog\Observer\CatalogProduct\ProductUpdated" />
+    </event>
+</config>
